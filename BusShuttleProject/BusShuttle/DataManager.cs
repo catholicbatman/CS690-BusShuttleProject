@@ -20,7 +20,6 @@ public class DataManager {
 
         Stops = new List<Stop>();
         var stopsFileContent = File.ReadAllLines("stops.txt");
-        
 
         foreach(var stopName in stopsFileContent) {
             Stops.Add(new Stop(stopName));
