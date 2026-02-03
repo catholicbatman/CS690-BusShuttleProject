@@ -31,9 +31,37 @@ public class DataManager {
         Loops[0].Stops.Add(Stops[3]);
         Loops[0].Stops.Add(Stops[4]);
 
+        //create the drivers' text file if not created, or update it if it is already created
+        //SynchronizeDrivers();
+
+        //creating a list of the file content line by line of drivers.txt
+        var driversFileContent = File.ReadAllLines("drivers.txt");
+        
+        /* if (File.Exists("drivers.txt")){
+        var driversFileContent = File.ReadAllLines("drivers.txt");  
+        }
+        else {
+            File.Create("drivers.txt");
+            var driversFileContent = File.ReadAllLines("drivers.txt");
+        }
+        */
+
+        //creating the list of drivers and then adding drivers that are in the driver file to the list
         Drivers = new List<Driver>();
-        Drivers.Add(new Driver("Huseyin Ergin"));
-        Drivers.Add(new Driver("Jane Doe"));
+        foreach(var driverName in driversFileContent) {
+            Drivers.Add(new Driver(driverName));
+        }
+
+        //adding two drivers to the list using the new method
+        //Drivers.Add(new Driver("Huseyin Ergin"));
+        //Drivers.Add(new Driver("Jane Doe"));
+        if(!File.Exists("drivers.txt")){
+            File.Create("drivers.txt");
+        }
+        //AddDriver(new Driver ("Huseyin Ergin"));
+        //AddDriver(new Driver ("Jane Doe"));
+        //AddDriver(new Driver ("Gabriel Dannemiller"));
+        
 
         PassengerData = new List<PassengerData>();
 
@@ -77,5 +105,23 @@ public class DataManager {
     public void RemoveStop(Stop stop) {
         Stops.Remove(stop);
         SynchronizeStops();
+    }
+    public void SynchronizeDrivers() {
+        if (File.Exists("drivers.txt")){
+            File.Delete("drivers.txt");
+        }
+        foreach(var driver in Drivers) {
+            File.AppendAllText("drivers.txt",driver.Name+Environment.NewLine);
+        }
+    }
+
+    public void AddDriver(Driver newDriver) {
+        Drivers.Add(newDriver);
+        SynchronizeDrivers();
+    }
+
+    public void RemoveDriver(Driver driver) {
+        Drivers.Remove(driver);
+        SynchronizeDrivers();
     }
 }
